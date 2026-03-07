@@ -2,7 +2,7 @@ package com.bookmystay.main;
 
 /*
  * @author developer
- * @version 4.0
+ * @version 5.0
  */
 
 import com.bookmystay.inventory.Inventory;
@@ -10,6 +10,8 @@ import com.bookmystay.search.SearchService;
 import com.bookmystay.bookingqueue.BookingQueue;
 import com.bookmystay.bookingqueue.Reservation;
 import com.bookmystay.booking.BookingService;
+import com.bookmystay.services.Service;
+import com.bookmystay.services.ServiceManager;
 
 import java.util.Scanner;
 
@@ -35,6 +37,9 @@ public class Main {
         // UC4: Booking Service
         BookingService bookingService = new BookingService(inventory);
 
+        // UC5: Service Manager
+        ServiceManager serviceManager = new ServiceManager();
+
         int choice;
         do {
             System.out.println("\n=== Booking Menu ===");
@@ -43,7 +48,9 @@ public class Main {
             System.out.println("3. View Pending Requests");
             System.out.println("4. Process Next Request & Confirm Booking");
             System.out.println("5. View Room Allocations");
-            System.out.println("6. Exit");
+            System.out.println("6. Add Service to Reservation");
+            System.out.println("7. View Services for Reservation");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             choice = sc.nextInt();
             sc.nextLine(); // consume newline
@@ -66,10 +73,26 @@ public class Main {
                     }
                 }
                 case 5 -> bookingService.displayAllocations();
-                case 6 -> System.out.println("Exiting booking system...");
+                case 6 -> {
+                    System.out.print("Enter reservation ID (e.g., Single-1): ");
+                    String resId = sc.nextLine();
+                    System.out.print("Enter service name: ");
+                    String serviceName = sc.nextLine();
+                    System.out.print("Enter service cost: ");
+                    double cost = sc.nextDouble();
+                    sc.nextLine();
+                    serviceManager.addService(resId, new Service(serviceName, cost));
+                }
+                case 7 -> {
+                    System.out.print("Enter reservation ID: ");
+                    String resId = sc.nextLine();
+                    serviceManager.displayServices(resId);
+                    System.out.println("Total additional cost: ₹" + serviceManager.calculateCost(resId));
+                }
+                case 8 -> System.out.println("Exiting booking system...");
                 default -> System.out.println("Invalid choice. Try again.");
             }
-        } while (choice != 6);
+        } while (choice != 8);
 
         sc.close();
     }

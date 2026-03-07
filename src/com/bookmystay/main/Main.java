@@ -1,30 +1,49 @@
 package com.bookmystay.main;
 
 import com.bookmystay.inventory.Inventory;
+import com.bookmystay.search.SearchService;
+
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        // Initialize inventory
+        Scanner sc = new Scanner(System.in);
+
+        // UC1: Inventory setup by Admin
         Inventory inventory = new Inventory();
+        System.out.println("=== Hotel Admin: Setup Inventory ===");
+        System.out.print("Enter number of room types to add: ");
+        int n = sc.nextInt();
+        sc.nextLine(); // consume newline
 
-        // Add room types
-        inventory.addRoomType("Single", 5, 2000.0);
-        inventory.addRoomType("Double", 3, 3500.0);
-        inventory.addRoomType("Suite", 2, 6000.0);
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter room type: ");
+            String type = sc.nextLine();
+            System.out.print("Enter count: ");
+            int count = sc.nextInt();
+            System.out.print("Enter price: ");
+            double price = sc.nextDouble();
+            sc.nextLine(); // consume newline
+            inventory.addRoomType(type, count, price);
+        }
 
-        // Display inventory
-        inventory.displayInventory();
+        // UC2: Guest searches
+        SearchService searchService = new SearchService(
+                inventory.getRoomCounts(),
+                inventory.getRoomPrices()
+        );
 
-        // Update counts and prices
-        inventory.updateRoomCount("Single", 4);
-        inventory.updateRoomPrice("Suite", 6500.0);
+        System.out.println("\n=== Guest: Search Rooms ===");
+        searchService.displayAvailableRooms();
 
-        // Display updated inventory
-        System.out.println("\nAfter updates:");
-        inventory.displayInventory();
+        System.out.print("\nEnter room type to check availability: ");
+        String searchType = sc.nextLine();
+        if (searchService.isAvailable(searchType)) {
+            System.out.println(searchType + " is available @ ₹" + searchService.getPrice(searchType));
+        } else {
+            System.out.println(searchType + " is not available.");
+        }
 
-        // Check availability and price
-        System.out.println("\nAvailable Single rooms: " + inventory.getAvailableCount("Single"));
-        System.out.println("Price of Suite: ₹" + inventory.getPrice("Suite"));
+        sc.close();
     }
 }

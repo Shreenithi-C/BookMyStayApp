@@ -1,5 +1,8 @@
 package com.bookmystay.main;
-
+/*
+ * @author developer
+ * @version 1.0
+ */
 import com.bookmystay.inventory.Inventory;
 
 public class Main {

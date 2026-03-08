@@ -2,7 +2,7 @@ package com.bookmystay.main;
 
 /*
  * @author developer
- * @version 5.0
+ * @version 6.0
  */
 
 import com.bookmystay.inventory.Inventory;
@@ -12,6 +12,7 @@ import com.bookmystay.bookingqueue.Reservation;
 import com.bookmystay.booking.BookingService;
 import com.bookmystay.services.Service;
 import com.bookmystay.services.ServiceManager;
+import com.bookmystay.history.BookingHistory;
 
 import java.util.Scanner;
 
@@ -40,6 +41,9 @@ public class Main {
         // UC5: Service Manager
         ServiceManager serviceManager = new ServiceManager();
 
+        // UC6: Booking History
+        BookingHistory bookingHistory = new BookingHistory();
+
         int choice;
         do {
             System.out.println("\n=== Booking Menu ===");
@@ -50,7 +54,9 @@ public class Main {
             System.out.println("5. View Room Allocations");
             System.out.println("6. Add Service to Reservation");
             System.out.println("7. View Services for Reservation");
-            System.out.println("8. Exit");
+            System.out.println("8. View Booking History");
+            System.out.println("9. Generate Booking Report");
+            System.out.println("10. Exit");
             System.out.print("Enter your choice: ");
             choice = sc.nextInt();
             sc.nextLine(); // consume newline
@@ -69,7 +75,10 @@ public class Main {
                 case 4 -> {
                     Reservation next = bookingQueue.processNext();
                     if (next != null) {
-                        bookingService.confirmBooking(next);
+                        boolean confirmed = bookingService.confirmBooking(next);
+                        if (confirmed) {
+                            bookingHistory.addReservation(next);
+                        }
                     }
                 }
                 case 5 -> bookingService.displayAllocations();
@@ -89,10 +98,12 @@ public class Main {
                     serviceManager.displayServices(resId);
                     System.out.println("Total additional cost: ₹" + serviceManager.calculateCost(resId));
                 }
-                case 8 -> System.out.println("Exiting booking system...");
+                case 8 -> bookingHistory.displayHistory();
+                case 9 -> bookingHistory.generateReport();
+                case 10 -> System.out.println("Exiting booking system...");
                 default -> System.out.println("Invalid choice. Try again.");
             }
-        } while (choice != 8);
+        } while (choice != 10);
 
         sc.close();
     }

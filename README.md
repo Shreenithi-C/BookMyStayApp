@@ -1,5 +1,4 @@
 # BookMyStayApp
-# BookMyStay – Consolidated System (UC1–UC6)
 
 ## Overview
 The `dev` branch integrates all six use cases into a complete hotel booking console application.

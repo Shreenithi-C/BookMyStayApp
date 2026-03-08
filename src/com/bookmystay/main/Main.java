@@ -1,7 +1,7 @@
 package com.bookmystay.main;
 /*
  * @author developer
- * @version 4.0
+ * @version 3.0
  */
 import com.bookmystay.inventory.Inventory;
 import com.bookmystay.search.SearchService;

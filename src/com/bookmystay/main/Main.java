@@ -1,5 +1,8 @@
 package com.bookmystay.main;
-
+/*
+ * @author developer
+ * @version 4.0
+ */
 import com.bookmystay.inventory.Inventory;
 import com.bookmystay.search.SearchService;
 import com.bookmystay.bookingqueue.BookingQueue;
